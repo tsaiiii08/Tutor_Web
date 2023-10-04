@@ -7,14 +7,23 @@ const userController = {
   signUpPage: (req, res) => {
     res.render('signup')
   },
-  signUp: (req, res) => {
-    bcrypt.hash(req.body.password, 10)
+  signUp: (req, res, next) => {
+    if (req.body.password !== req.body.confirmPassword) throw new Error('密碼與確認密碼不相符!')
+    User.findOne({ where: { email: req.body.email } })
+      .then(user => {
+        if (user) throw new Error('此電子郵件已被註冊過了!')
+        return bcrypt.hash(req.body.password, 10)
+      })
       .then(hash => User.create({
         email: req.body.email,
         name: req.body.name,
         password: hash
       }))
-      .then(() => res.redirect('/users/signIn'))
+      .then(() => {
+        req.flash('success_messages', '成功註冊帳號！')
+        res.redirect('/users/signIn')
+      })
+      .catch(err => next(err))
   }
 }
 
