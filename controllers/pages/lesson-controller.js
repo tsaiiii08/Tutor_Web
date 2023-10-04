@@ -1,7 +1,6 @@
 const lessonController = {
-  getLessons: (req,res)=>{
+  getLessons: (req, res) => {
     res.render('lessons')
-
   }
 }
 

@@ -1,0 +1,25 @@
+<div class="row mt-5">
+  <div class="col-md-6 m-auto">
+    <div class="card card-body">
+      <h1 class="text-center mt-3 mb-3">登入</h1>
+      <form action="/users/signIn" method="POST">
+        <div class="mb-3">
+          <label for="email" class="mb-2">郵件</label>
+          <input type="email" id="email" name="email" class="form-control" placeholder="Enter Email">
+        </div>
+        <div class="mb-3">
+          <label for="password" class="mb-2">密碼</label>
+          <input type="password" id="password" name="password" class="form-control" placeholder="Enter Password">
+        </div>
+        <div class="mt-4 d-flex flex-column">
+          <button type="submit" class="mb-3 btn btn-primary btn-block">登入</button>
+          <a href="/auth/google" class="btn btn-info btn-block">Google 登入</a>
+        </div>
+
+      </form>
+      <p class="lead mt-4">
+        No Account? <a href="/users/register">註冊</a>
+      </p>
+    </div>
+  </div>
+</div>
