@@ -4,6 +4,10 @@ const userController = {
   signInPage: (req, res) => {
     res.render('signin')
   },
+  signIn: (req, res, next) => {
+    req.flash('success_message', '成功登入!')
+    res.redirect('/lessons')
+  },
   signUpPage: (req, res) => {
     res.render('signup')
   },
