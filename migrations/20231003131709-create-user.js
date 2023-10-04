@@ -19,7 +19,7 @@ module.exports = {
       },
       password: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       avatar: {
         type: Sequelize.STRING
@@ -32,12 +32,10 @@ module.exports = {
       },
       is_teacher: {
         type: Sequelize.BOOLEAN,
-        allowNull: false,
         defaultValue: false
       },
       is_admin: {
         type: Sequelize.BOOLEAN,
-        allowNull: false,
         defaultValue: false
       },
       created_at: {
