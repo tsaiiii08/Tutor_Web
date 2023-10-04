@@ -28,7 +28,15 @@ const userController = {
         res.redirect('/users/signIn')
       })
       .catch(err => next(err))
+  },
+  logout: (req, res, next) => {
+    req.logout(req.user, (err) => {
+      if (err) return next(err)
+      req.flash('success_messages', '成功登出!')
+      res.redirect('/users/signIn')
+    })
   }
+
 }
 
 module.exports = userController
