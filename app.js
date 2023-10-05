@@ -10,6 +10,7 @@ const flash = require('connect-flash')
 const port = process.env.PORT || 3000
 const { pages, apis } = require('./routes')
 const db = require('./models')
+const { getUser } = require('./helpers/auth-helpers')
 const handlebarsHelpers = require('./helpers/handlebars-helpers')
 app.engine('hbs', exphbs.engine({ defaultLayout: 'main', extname: '.hbs', helpers: handlebarsHelpers }))
 app.set('view engine', 'hbs')
@@ -21,6 +22,7 @@ app.use(flash())
 app.use((req, res, next) => {
   res.locals.success_messages = req.flash('success_messages') // 設定 success_msg 訊息
   res.locals.error_messages = req.flash('error_messages') // 設定 warning_msg 訊息
+  res.locals.user = getUser(req)
   next()
 })
 app.use(pages)
