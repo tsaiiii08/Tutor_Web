@@ -9,7 +9,8 @@ const { authenticated, authenticatedAdmin } = require('../../middleware/auth')
 router.get('/admin/users', authenticatedAdmin, adminController.getUsers)
 router.get('/auth/google', passport.authenticate('google', {
   scope: ['https://www.googleapis.com/auth/userinfo.profile',
-    'https://www.googleapis.com/auth/userinfo.email'] }))
+    'https://www.googleapis.com/auth/userinfo.email']
+}))
 router.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/users/signIn', failureFlash: true }), userController.signIn)
 router.post('/users/signIn', passport.authenticate('local', { failureRedirect: '/users/signIn', failureFlash: true }), userController.signIn)

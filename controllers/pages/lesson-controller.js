@@ -1,6 +1,8 @@
+const { getUser } = require('../../helpers/auth-helpers')
 const lessonController = {
   getLessons: (req, res) => {
-    res.render('lessons')
+    const user = getUser(req)
+    res.render('lessons', { user })
   }
 }
 

@@ -1,0 +1,29 @@
+<nav class="d-flex justify-content-between align-items-center navbar navbar-expand-lg bg-body-tertiary"
+  style="background-color:rgb(244, 243, 193) ">
+  <div class="d-flex mx-3">
+    <div class="container-fluid">
+      <a class="navbar-brand" style="font-size:40px;color:green" href="/lessons">Tutor</a>
+    </div>
+    {{#ifCondOnlyA user user.isTeacher user.isAdmin}}
+    <div class="d-flex align-items-center">
+      <a href="/users/becTeacher">
+        <button class="btn" style="width:200px;font-size:20px; color:gray">成為老師</button></a>
+    </div>
+    {{/ifCondOnlyA}}
+  </div>
+  <div class="d-flex mx-3">
+    {{#if user}}
+    <div class="d-flex align-items-center" style="margin-left:30px;margin-right:20px;font-size:20px; color:gray">
+      {{user.name}}
+    </div>
+    {{/if}}
+    {{#ifCondAnd user user.isAdmin}}
+     <a href="/admin/users"><button class="btn btn-outline-primary my-sm-0 my-2" style="margin-right:10px">後台</button></a>
+    {{/ifCondAnd}}
+    {{#if user}}
+    <a href="/users/logout"><button class="btn btn-outline-success my-sm-0 my-2">登出</button></a>
+    {{else}}
+    <a href="/users/signIn"><button class="btn btn-outline-success my-sm-0 my-2">登入</button></a>
+     {{/if}}
+  </div>
+</nav>

@@ -1,6 +1,8 @@
+const { getUser } = require('../../helpers/auth-helpers')
 const adminController = {
   getUsers: (req, res) => {
-    res.render('admin/users')
+    const user = getUser(req)
+    res.render('admin/users', { user })
 
   }
 }
