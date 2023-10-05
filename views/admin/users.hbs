@@ -1,8 +1,20 @@
 <div class="mt-5 container text-center">
-  <div class="row" style="background-color:rgb(235, 231, 227);padding:10px">
-    <div class="col-sm">編號</div>
-    <div class="col-sm">名字</div>
-    <div class="col-sm">身分</div>
+  <table class="table align-middle">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">編號</th>
+        <th scope="col">名字</th>
+        <th scope="col">身分</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each users}}
+      <tr>
+        <th scope="row">{{this.id}}</th>
+        <td>{{this.name}}</td>
+        <td>{{this.identity}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
   </div>
-
-</div>
