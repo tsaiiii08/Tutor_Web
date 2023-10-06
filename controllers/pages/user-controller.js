@@ -12,10 +12,11 @@ const userController = {
     res.render('signup')
   },
   signUp: (req, res, next) => {
-    if (req.body.password !== req.body.confirmPassword) throw new Error('密碼與確認密碼不相符!')
+    if (!req.body.name || !req.body.email || !req.body.password || !req.body.confirmPassword) throw new Error('所有欄位皆為必填！')
     User.findOne({ where: { email: req.body.email } })
       .then(user => {
-        if (user) throw new Error('此電子郵件已被註冊過了!')
+        if (user) throw new Error('此電子郵件此被註冊過了！')
+        if (req.body.password !== req.body.confirmPassword) throw new Error('密碼與確認密碼不相符！')
         return bcrypt.hash(req.body.password, 10)
       })
       .then(hash => User.create({
@@ -36,7 +37,6 @@ const userController = {
       res.redirect('/users/signIn')
     })
   }
-
 }
 
 module.exports = userController
