@@ -12,7 +12,7 @@ const userController = {
     res.render('signup')
   },
   signUp: (req, res, next) => {
-    if (!req.body.name || !req.body.email || !req.body.password || !req.body.confirmPassword) throw new Error('所有欄位皆為必填！')
+   if (!req.body.name || !req.body.email || !req.body.password || !req.body.confirmPassword) throw new Error('所有欄位皆為必填！')
     User.findOne({ where: { email: req.body.email } })
       .then(user => {
         if (user) throw new Error('此電子郵件此被註冊過了！')
