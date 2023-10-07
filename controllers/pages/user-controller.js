@@ -36,6 +36,9 @@ const userController = {
       req.flash('success_messages', '成功登出!')
       res.redirect('/users/signIn')
     })
+  },
+  becTeacherPage:(req, res, next) => {
+    res.render('becTeacher')
   }
 }
 
