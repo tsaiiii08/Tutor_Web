@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs')
-const { User } = require('../../models')
+const { User, Lesson } = require('../../models')
 const userController = {
   signInPage: (req, res) => {
     res.render('signin')
@@ -12,7 +12,7 @@ const userController = {
     res.render('signup')
   },
   signUp: (req, res, next) => {
-   if (!req.body.name || !req.body.email || !req.body.password || !req.body.confirmPassword) throw new Error('所有欄位皆為必填！')
+    if (!req.body.name || !req.body.email || !req.body.password || !req.body.confirmPassword) throw new Error('所有欄位皆為必填！')
     User.findOne({ where: { email: req.body.email } })
       .then(user => {
         if (user) throw new Error('此電子郵件此被註冊過了！')
@@ -37,8 +37,34 @@ const userController = {
       res.redirect('/users/signIn')
     })
   },
-  becTeacherPage:(req, res, next) => {
+  becTeacherPage: (req, res, next) => {
     res.render('becTeacher')
+  },
+  becTeacher: (req, res, next) => {
+    if (!req.body.name || !req.body.link || !req.body.timePerClass || !req.body.availableDay) throw new Error('除了課程介紹外，其餘欄位皆為必填！')
+    Promise.all([
+      Lesson.findOne({ where: { teacherId: req.user.id } }),
+      User.findByPk(req.user.id)
+    ])
+      .then(([lesson, user]) => {
+        if (lesson) {
+          throw new Error('你已經有課程了!')
+        }
+        Lesson.create({
+          teacherId: req.user.id,
+          name: req.body.name,
+          introduction: req.body.introduction,
+          link: req.body.link,
+          timePerClass: req.body.timePerClass,
+          availableDay: req.body.availableDay.join('')
+        })
+        return user.update({ isTeacher: true })
+      })
+      .then(() => {
+        req.flash('success_messages', '已成功成為老師!')
+        res.redirect('/lessons')
+      })
+      .catch(err => next(err))
   }
 }
 
