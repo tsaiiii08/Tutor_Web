@@ -26,7 +26,7 @@ module.exports = {
       },
       available_day: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.STRING
       },
       link: {
         allowNull: false,

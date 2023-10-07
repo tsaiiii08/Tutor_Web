@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     introduction: DataTypes.TEXT,
     timePerClass: DataTypes.INTEGER,
-    availableDay: DataTypes.DATE,
+    availableDay: DataTypes.STRING,
     link: DataTypes.STRING
   }, {
     sequelize,
