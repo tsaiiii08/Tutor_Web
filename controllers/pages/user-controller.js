@@ -67,8 +67,19 @@ const userController = {
       .catch(err => next(err))
   },
   getUser: (req, res, next) => {
-    console.log(req.user.isTeacher)
     res.render('users/profile')
+  },
+  editUserPage: (req, res, next) => {
+    console.log(req.user.id)
+    if (req.params.id !== (req.user.id.toString())) {
+      return res.redirect(`users/${req.user.id}`)
+    }
+    Lesson.findOne({ where: { teacherId: req.user.id }, raw: true })
+      .then(lesson => {
+        console.log(lesson)
+        res.render('users/edit', { lesson })
+      })
+      .catch(err => next(err))
   }
 }
 

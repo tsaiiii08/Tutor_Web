@@ -1,0 +1,71 @@
+<div class="row mt-5">
+  <div class="col-md-6 m-auto">
+    <div class="card card-body">
+      {{> message}}
+      <form action="/users/{{user.id}}" method="POST">
+      {{#if user.isTeacher}}
+        <div class="mb-3">
+          <label for="name" class="mb-2">姓名</label>
+          <input type="text" id="name" name="name" class="form-control" placeholder="為必填" value="{{user.name}}">
+        </div>
+        <div class="mb-3">
+          <label for="avatar" class="mb-2">大頭貼</label>
+          <input type="file" id="avatar" name="avatar" class="form-control-file" placeholder=""
+            value="{{user.avatar}}">
+        </div>
+        <div class="mb-3">
+          <label for="introduction" class="mb-2">自我介紹</label>
+          <input type="text" id="introduction" name="introduction" class="form-control" placeholder=""
+            value="{{user.introduction}}">
+        </div>
+        <div class="mb-3">
+          <label for="lessonName" class="mb-2">課程名稱</label>
+          <input type="text" id="lessonName" name="lessonName" class="form-control" placeholder=""
+            value="{{lesson.name}}">
+        </div>
+        <div class="mb-3">
+          <label for="lessonIntro" class="mb-2">課程及教學風格介紹</label>
+          <input type="text" id="lessonIntro" name="lessonIntro" class="form-control" placeholder=""
+            value="{{lesson.introduction}}">
+        </div>
+        <div class="mb-3">
+          <label for="link" class="mb-2">上課視訊連結</label>
+          <input type="url" id="link" name="link" class="form-control" placeholder="為必填" value="{{lesson.link}}">
+        </div>
+        <div class="mb-3">
+          <label for="timePerClass" class="mb-2" style="margin-right:10px">每堂課時間長度</label>
+          <input type="radio" name="timePerClass" value="30" style="margin:0 5px" {{#ifEqual lesson.timePerClass 30}}checked {{/ifEqual}}>三十分鐘
+          <input type="radio" name="timePerClass" value="60" style="margin:0 5px" {{#ifEqual lesson.timePerClass 60}}checked {{/ifEqual}}>六十分鐘
+        </div>
+        <div class="mb-3">
+          <label for="availableDay" class="mb-2" style="margin-right:10px">接下來兩周星期幾可以上課(可複選)</label>
+          <input type="checkbox" name="availableDay" value="0" style="margin-left:5px" {{#ifIncludes lesson.availableDay 0}}checked {{/ifIncludes}}>星期日
+          <input type="checkbox" name="availableDay" value="1" style="margin-left:5px" {{#ifIncludes lesson.availableDay 1}}checked {{/ifIncludes}}>星期一
+          <input type="checkbox" name="availableDay" value="2" style="margin-left:5px" {{#ifIncludes lesson.availableDay 2}}checked {{/ifIncludes}}>星期二
+          <input type="checkbox" name="availableDay" value="3" style="margin-left:5px" {{#ifIncludes lesson.availableDay 3}}checked {{/ifIncludes}}>星期三
+          <input type="checkbox" name="availableDay" value="4" style="margin-left:5px" {{#ifIncludes lesson.availableDay 4}}checked {{/ifIncludes}}>星期四
+          <input type="checkbox" name="availableDay" value="5" style="margin-left:5px" {{#ifIncludes lesson.availableDay 5}}checked {{/ifIncludes}}>星期五
+          <input type="checkbox" name="availableDay" value="6" style="margin-left:5px" {{#ifIncludes lesson.availableDay 6}}checked {{/ifIncludes}}>星期六
+        </div>
+      {{else}}
+        <div class="mb-3">
+          <label for="name" class="mb-2">姓名</label>
+          <input type="text" id="name" name="name" class="form-control" placeholder="為必填" value="{{user.name}}">
+        </div>
+        <div class="mb-3">
+          <label for="avatar" class="mb-2">大頭貼</label>
+          <input type="file" id="avatar" name="avatar" class="form-control-file" value="{{user.avatar}}">
+        </div>
+        <div class="mb-3">
+          <label for="introduction" class="mb-2">自我介紹</label>
+          <input type="text" id="introduction" name="introduction" class="form-control" placeholder=""
+            value="{{user.introduction}}">
+        </div>
+      {{/if}}
+        <div class="mt-4 d-flex flex-column">
+          <button type="submit" class="btn btn-primary btn-block mb-2">修改</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

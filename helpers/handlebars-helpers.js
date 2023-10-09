@@ -6,5 +6,15 @@ module.exports = {
     if (a && !b && !c) {
       return options.fn(this)
     } else return options.inverse(this)
+  },
+  ifEqual: function (a, b, options) {
+    if (a === b) {
+      return options.fn(this)
+    } else return options.inverse(this)
+  },
+  ifIncludes: function (a, b, options) {
+    if (a.includes(b)) {
+      return options.fn(this)
+    } else return options.inverse(this)
   }
 }
