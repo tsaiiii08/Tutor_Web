@@ -74,7 +74,21 @@ const userController = {
     }
     User.findByPk(req.params.id, { raw: true })
       .then((user) => {
-        res.render('users/profile', { user, canEdit })
+        if (!user) throw new Error('無此使用者!')
+        const thisUser = user
+       console.log(thisUser)
+        return thisUser
+      })
+      .then((thisUser) => {
+        if (thisUser.isTeacher === 1) {
+          Lesson.findOne({ where: { teacherId: req.params.id }, raw: true })
+            .then((lesson) => {
+              console.log(lesson)
+              res.render('users/profile', { thisUser, lesson, canEdit })
+            })
+        } else {
+          res.render('users/profile', { thisUser, canEdit })
+        }
       })
       .catch(err => next(err))
   },
@@ -93,8 +107,8 @@ const userController = {
       return res.redirect(`users/${req.user.id}`)
     }
     const { file } = req
-    console.log(file)
     if (req.user.isTeacher === false) {
+      if (!req.body.name) throw new Error('姓名為必填')
       Promise.all([
         User.findByPk(req.user.id),
         localFileHandler(file)
@@ -111,6 +125,7 @@ const userController = {
         })
         .catch(err => next(err))
     } else {
+      if (!req.body.name || !req.body.lessonName || !req.body.link || !req.body.timePerClass || !req.body.availableDay) throw new Error('除了大頭貼和自我介紹及課程介紹外，其餘皆為必填！')
       Promise.all([
         Lesson.findOne({ where: { teacherId: req.user.id } }),
         User.findByPk(req.user.id),

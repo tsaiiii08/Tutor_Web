@@ -1,14 +1,14 @@
 <div class="mt-5 mb-5 container text-center" style="height:100%">
   <div class="row" style="height:100%" >
     {{> message}}
-    {{#if user.isTeacher}}
+    {{#if thisUser.isTeacher}}
     <div class="col-4 d-flex flex-column justify-content-between">
       <div class="row d-flex-column" style="text-align: start">
-        <img src="{{user.avatar}}" alt="你的大頭貼" style="height:200px;width:200px;background-color:gray;margin-bottom:20px">
-        <p style="font-size:30px;">{{user.name}}</p>
-        <p>{{user.nation}}</p>
+        <img src="{{thisUser.avatar}}" alt="你的大頭貼" style="height:200px;width:200px;background-color:gray;margin-bottom:20px">
+        <p style="font-size:30px;">{{thisUser.name}}</p>
+        <p>{{thisUser.nation}}</p>
         <p>目前平均評分{{lesson.score}}</p>
-        <p>{{user.introduction}}</p>
+        <p>{{thisUser.introduction}}</p>
       </div>
       {{#if canEdit}}
       <div class="row d-flex">
@@ -31,7 +31,10 @@
       </div>
       <div class="row">
         <h5>課程及教學風格</h5>
-        <div class="d-flex border-top">
+        <div class="d-flex flex-column border-top" style="text-align:start">
+          <div>
+            <h5 class="mt-2 mb-5">{{lesson.name}}</h5>
+          </div>
           <p>{{lesson.introduction}}</p>
         </div>
       </div>
@@ -48,10 +51,10 @@
     {{else}}
     <div class="col-4 d-flex flex-column justify-content-between">
       <div class="row d-flex-column" style="text-align: start">
-        <img src="{{user.avatar}}" alt="你的大頭貼" style="height:200px;width:200px;background-color:gray;margin-bottom:20px">
-        <p style="font-size:30px;">{{user.name}}</p>
-        <p>{{user.nation}}</p>
-        <p>{{user.introduction}}</p>
+        <img src="{{thisUser.avatar}}" alt="你的大頭貼" style="height:200px;width:200px;background-color:gray;margin-bottom:20px">
+        <p style="font-size:30px;">{{thisUser.name}}</p>
+        <p>{{thisUser.nation}}</p>
+        <p>{{thisUser.introduction}}</p>
       </div>
       {{#if canEdit}}
       <div class="row d-flex">
@@ -87,7 +90,7 @@
       <div class="row">
         <h5>我的學習時數名次</h5>
         <div class="d-flex border">
-          {{user.rank}}/{{totalAmount}}
+          {{thisUser.rank}}/{{totalAmount}}
         </div>
       </div>
     </div>
