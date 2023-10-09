@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs')
 const { User, Lesson } = require('../../models')
+const { localFileHandler } = require('../../helpers/file-helpers')
 const userController = {
   signInPage: (req, res) => {
     res.render('signin')
@@ -83,25 +84,32 @@ const userController = {
     if (req.params.id !== (req.user.id.toString())) {
       return res.redirect(`users/${req.user.id}`)
     }
+    const { file } = req
+    console.log(file)
     if (req.user.isTeacher === false) {
-      User.findByPk(req.user.id)
-        .then((user) => {
-          user.update({
+      Promise.all([
+        User.findByPk(req.user.id),
+        localFileHandler(file)
+      ])
+        .then(([user, filepath]) => {
+          return user.update({
             name: req.body.name,
-            introduction: req.body.introduction
+            introduction: req.body.introduction,
+            avatar: filepath || user.avatar
           })
-            .then(() => {
-              res.redirect(`/users/${req.user.id}`)
-            })
+        })
+        .then(() => {
+          res.redirect(`/users/${req.user.id}`)
         })
         .catch(err => next(err))
     } else {
       Promise.all([
         Lesson.findOne({ where: { teacherId: req.user.id } }),
-        User.findByPk(req.user.id)
+        User.findByPk(req.user.id),
+        localFileHandler(file)
       ])
-        .then(([lesson, user]) => {
-          Promise.all([
+        .then(([lesson, user, filepath]) => {
+          return Promise.all([
             lesson.update({
               name: req.body.lessonName,
               introduction: req.body.lessonIntro,
@@ -111,12 +119,13 @@ const userController = {
             }),
             user.update({
               name: req.body.name,
-              introduction: req.body.introduction
+              introduction: req.body.introduction,
+              avatar: filepath || user.avatar
             })
           ])
-            .then(() => {
-              res.redirect(`/users/${req.user.id}`)
-            })
+        .then(() => {
+          res.redirect(`/users/${req.user.id}`)
+        })
         })
         .catch(err => next(err))
     }
