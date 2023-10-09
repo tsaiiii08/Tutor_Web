@@ -70,16 +70,56 @@ const userController = {
     res.render('users/profile')
   },
   editUserPage: (req, res, next) => {
-    console.log(req.user.id)
     if (req.params.id !== (req.user.id.toString())) {
       return res.redirect(`users/${req.user.id}`)
     }
     Lesson.findOne({ where: { teacherId: req.user.id }, raw: true })
       .then(lesson => {
-        console.log(lesson)
         res.render('users/edit', { lesson })
       })
       .catch(err => next(err))
+  },
+  editUser: (req, res, next) => {
+    if (req.params.id !== (req.user.id.toString())) {
+      return res.redirect(`users/${req.user.id}`)
+    }
+    if (req.user.isTeacher === false) {
+      User.findByPk(req.user.id)
+        .then((user) => {
+          user.update({
+            name: req.body.name,
+            introduction: req.body.introduction
+          })
+            .then(() => {
+              res.redirect(`/users/${req.user.id}`)
+            })
+        })
+        .catch(err => next(err))
+    } else {
+      Promise.all([
+        Lesson.findOne({ where: { teacherId: req.user.id } }),
+        User.findByPk(req.user.id)
+      ])
+        .then(([lesson, user]) => {
+          Promise.all([
+            lesson.update({
+              name: req.body.lessonName,
+              introduction: req.body.lessonIntro,
+              link: req.body.link,
+              timePerClass: req.body.timePerClass,
+              availableDay: req.body.availableDay.join('')
+            }),
+            user.update({
+              name: req.body.name,
+              introduction: req.body.introduction
+            })
+          ])
+            .then(() => {
+              res.redirect(`/users/${req.user.id}`)
+            })
+        })
+        .catch(err => next(err))
+    }
   }
 }
 

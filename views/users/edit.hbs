@@ -2,7 +2,7 @@
   <div class="col-md-6 m-auto">
     <div class="card card-body">
       {{> message}}
-      <form action="/users/{{user.id}}" method="POST">
+      <form action="/users/{{user.id}}/edit?_method=PUT" method="POST">
       {{#if user.isTeacher}}
         <div class="mb-3">
           <label for="name" class="mb-2">姓名</label>
