@@ -38,7 +38,7 @@ const userController = {
     })
   },
   becTeacherPage: (req, res, next) => {
-    res.render('becTeacher')
+    res.render('users/becTeacher')
   },
   becTeacher: (req, res, next) => {
     if (!req.body.name || !req.body.link || !req.body.timePerClass || !req.body.availableDay) throw new Error('除了課程介紹外，其餘欄位皆為必填！')
@@ -65,6 +65,10 @@ const userController = {
         res.redirect('/lessons')
       })
       .catch(err => next(err))
+  },
+  getUser: (req, res, next) => {
+    console.log(req.user.isTeacher)
+    res.render('users/profile')
   }
 }
 

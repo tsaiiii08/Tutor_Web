@@ -14,7 +14,7 @@
   <div class="d-flex mx-3">
     {{#if user}}
     <div class="d-flex align-items-center" style="margin-left:30px;margin-right:20px;font-size:20px; color:gray">
-      {{user.name}}
+      <a style="text-decoration:none" href="/users/profile">{{user.name}}</a>
     </div>
     {{/if}}
     {{#ifCondAnd user user.isAdmin}}
