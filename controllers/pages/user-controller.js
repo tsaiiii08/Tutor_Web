@@ -68,7 +68,15 @@ const userController = {
       .catch(err => next(err))
   },
   getUser: (req, res, next) => {
-    res.render('users/profile')
+    let canEdit = false
+    if (req.user.id.toString() === req.params.id) {
+      canEdit = true
+    }
+    User.findByPk(req.params.id, { raw: true })
+      .then((user) => {
+        res.render('users/profile', { user, canEdit })
+      })
+      .catch(err => next(err))
   },
   editUserPage: (req, res, next) => {
     if (req.params.id !== (req.user.id.toString())) {
@@ -123,9 +131,9 @@ const userController = {
               avatar: filepath || user.avatar
             })
           ])
-        .then(() => {
-          res.redirect(`/users/${req.user.id}`)
-        })
+            .then(() => {
+              res.redirect(`/users/${req.user.id}`)
+            })
         })
         .catch(err => next(err))
     }

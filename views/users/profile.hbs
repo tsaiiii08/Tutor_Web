@@ -10,9 +10,11 @@
         <p>目前平均評分{{lesson.score}}</p>
         <p>{{user.introduction}}</p>
       </div>
+      {{#if canEdit}}
       <div class="row d-flex">
         <a href="/users/{{user.id}}/edit" class="btn btn-info btn-block" style="width:200px">修改個人資料和可預約的上課時間</a>
       </div>
+      {{/if}}
     </div>
     <div class="col-8 d-flex flex-column justify-content-between">
       <div class="row">
@@ -51,9 +53,11 @@
         <p>{{user.nation}}</p>
         <p>{{user.introduction}}</p>
       </div>
+      {{#if canEdit}}
       <div class="row d-flex">
         <a href="/users/{{user.id}}/edit" class="btn btn-info btn-block" style="width:200px">修改個人資料</a>
       </div>
+      {{/if}}
     </div>
     <div class="col-8 d-flex flex-column justify-content-between">
       <div class="row">
