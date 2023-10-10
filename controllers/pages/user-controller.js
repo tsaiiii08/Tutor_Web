@@ -116,6 +116,7 @@ const userController = {
         .then(([user, filepath]) => {
           return user.update({
             name: req.body.name,
+            nation: req.body.nation,
             introduction: req.body.introduction,
             avatar: filepath || user.avatar
           })
@@ -125,7 +126,7 @@ const userController = {
         })
         .catch(err => next(err))
     } else {
-      if (!req.body.name || !req.body.lessonName || !req.body.link || !req.body.timePerClass || !req.body.availableDay) throw new Error('除了大頭貼和自我介紹及課程介紹外，其餘皆為必填！')
+      if (!req.body.name || !req.body.lessonName || !req.body.link || !req.body.timePerClass || !req.body.availableDay) throw new Error('姓名、課程名稱、上課視訊連結、每堂課時間長度以及可以上課時間皆為必填！')
       Promise.all([
         Lesson.findOne({ where: { teacherId: req.user.id } }),
         User.findByPk(req.user.id),
@@ -142,6 +143,7 @@ const userController = {
             }),
             user.update({
               name: req.body.name,
+              nation: req.body.nation,
               introduction: req.body.introduction,
               avatar: filepath || user.avatar
             })
