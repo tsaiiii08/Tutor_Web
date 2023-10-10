@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs')
 const { User, Lesson } = require('../../models')
-const { localFileHandler } = require('../../helpers/file-helpers')
+const { imgurFileHandler } = require('../../helpers/file-helpers')
 const userController = {
   signInPage: (req, res) => {
     res.render('signin')
@@ -111,7 +111,7 @@ const userController = {
       if (!req.body.name) throw new Error('姓名為必填')
       Promise.all([
         User.findByPk(req.user.id),
-        localFileHandler(file)
+        imgurFileHandler(file)
       ])
         .then(([user, filepath]) => {
           return user.update({
