@@ -129,7 +129,7 @@ const userController = {
       Promise.all([
         Lesson.findOne({ where: { teacherId: req.user.id } }),
         User.findByPk(req.user.id),
-        localFileHandler(file)
+        imgurFileHandler(file)
       ])
         .then(([lesson, user, filepath]) => {
           return Promise.all([
