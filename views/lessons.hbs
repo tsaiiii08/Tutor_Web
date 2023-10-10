@@ -3,7 +3,7 @@
   <div class="row">
     {{> message}}
     <div class="col-9">
-      <div class="row">
+      <div class="row col-12">
         <form action="/lessons/search">
           <div class="input-group">
             <input type="text" name="keyword" class="form-control" placeholder="輸入老師姓名" aria-label="Teacher Name..."
@@ -13,6 +13,27 @@
             </div>
           </div>
         </form>
+        <div class="col-12 mx-auto mt-5">
+          <div class="row row-cols-sm-3 d-flex justify-content-between" style="margin:5px;">
+            {{#each lessons}}
+            <div class="card mb-2" style="width:33%;">
+              <a href="/users/{{this.teacherId}}" style="text-decoration:none;color:black">
+                <div class="d-flex mt-3 mx-2">
+                  <img class="card-img-top rounded-circle" src="{{this.User.avatar}}" style="background-color:gray; width:70px;height:70px">
+                  <div class="d-flex flex-column mt-3 mx-3" style="text-align:start">
+                    <h5 class="card-title mb-1">{{this.User.name}}</h6>
+                    <p>{{this.User.nation}}</p>
+                  </div>
+                </div>
+                <div class="card-body" style="text-align:start">
+                  <h6 style="font-size:1.1rem;">{{this.name}}</h6>
+                  <p style="color:gray">{{this.introduction}}</p>
+                </div>
+              </a>
+            </div>
+            {{/each}}
+          </div>
+        </div>
       </div>
     </div>
     <div class="col-3 border border-success">
