@@ -14,23 +14,23 @@ const randomAvaiDay = () => {
   return randomAvaiDay
 }
 
-const datesInPeriod = (date, day) => {
+const datesInPeriod = (date, day) => { // 算出14內可預約的所有日期
   const PERIOD = 14 // 可選課時間目前設定為14天內
   const datesInPeriod = []
   for (let i = 1; i <= PERIOD; i++) {
-    const targetDate = (date.setDate(date.getDate() + 1))
-    if (day.includes(date.getDay(targetDate))) {
+    const targetDate = (date.setDate(date.getDate() + 1)) // date為lesson最近一次更新時間
+    if (day.includes(date.getDay(targetDate))) { // day為老師選定的可預約星期x
       datesInPeriod.push(new Date(targetDate))
     }
   }
   return datesInPeriod
 }
 
-const avaiLessons = (dates, timePerClass) => {
+const avaiLessons = (dates, timePerClass) => { // 算出14內可預約的所有時段
   const avaiLessons = []
   if (timePerClass === 30) {
     let index = 0
-    dates.forEach(date => {
+    dates.forEach(date => { // dates是老師選定的兩周內可上課日期
       for (let i = 18; i < 22; i++) {
         date.setHours(i)
         avaiLessons.push({
@@ -56,4 +56,10 @@ const avaiLessons = (dates, timePerClass) => {
   return avaiLessons
 }
 
-module.exports = { randomAvaiDay, datesInPeriod, avaiLessons }
+const dateForward = (date) => {
+  const d = new Date(date) // 不希望更改到date本身
+  const FOREARD_RANGE = 21 // 需固定老師選定的星期，故是七的倍數，又想確認是已上完的課故至少要比十四天長
+  return new Date(d.setDate(d.getDate() - FOREARD_RANGE))
+}
+
+module.exports = { randomAvaiDay, datesInPeriod, avaiLessons, dateForward }
