@@ -19,12 +19,12 @@
     <div class="col-8 d-flex flex-column justify-content-between">
       <div class="row">
         <h5>New schedule</h5>
-        <div class="d-flex border-top">
+        <div class="row d-flex justify-content-between border-top">
           {{#each schedule}}
-          <div class="d-flex flex-column border">
-            <p >時間:{{this.time}}</p>
-            <p>學生姓名:{{this.studnetName}}</p>
-            <p>上課連結:{{this.link}}</p>
+          <div class="d-flex flex-column border mt-2" style="width:49%;text-align:start;margin-right:2px;padding:5px">
+            <p >時間: {{this.time}}</p>
+            <p>學生姓名: {{this.User.name}}</p>
+            <p style="margin:0px">上課連結: <a href="{{../lesson.link}}">{{../lesson.link}}</a></p>
           </div>
           {{/each}}
         </div>
@@ -65,12 +65,12 @@
     <div class="col-8 d-flex flex-column justify-content-between">
       <div class="row">
         <h5>New schedule</h5>
-        <div class="d-flex border-top">
+        <div class="row d-flex justify-content-between border-top">
           {{#each schedule}}
-          <div class="d-flex flex-column border">
-            <p>時間:{{this.time}}</p>
-            <p>老師姓名:{{this.teacherName}}</p>
-            <p>上課連結:{{this.link}}</p>
+            <div class="d-flex flex-column border mt-2" style="width:49%;text-align:start;margin-right:2px;padding:5px">
+            <p>時間: {{this.time}}</p>
+            <p>老師姓名: {{this.Lesson.User.name}}</p>
+            <p>上課連結:<a href="{{this.Lesson.link}}"> {{this.Lesson.link}}</a></p>
           </div>
           {{/each}}
         </div>

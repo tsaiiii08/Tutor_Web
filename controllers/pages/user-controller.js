@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs')
-const { User, Lesson } = require('../../models')
+const { User, Lesson, Enrollment } = require('../../models')
 const { imgurFileHandler } = require('../../helpers/file-helpers')
+const { ifPast, timeFormater } = require('../../helpers/date-helpers')
+const enrollment = require('../../models/enrollment')
 const userController = {
   signInPage: (req, res) => {
     res.render('signin')
@@ -76,18 +78,31 @@ const userController = {
       .then((user) => {
         if (!user) throw new Error('無此使用者!')
         const thisUser = user
-       console.log(thisUser)
         return thisUser
       })
       .then((thisUser) => {
         if (thisUser.isTeacher === 1) {
-          Lesson.findOne({ where: { teacherId: req.params.id }, raw: true })
+          Lesson.findOne({ where: { teacherId: req.params.id }, include: [{ model: Enrollment, include: User }], raw: false, nest: true })
+
             .then((lesson) => {
-              console.log(lesson)
-              res.render('users/profile', { thisUser, lesson, canEdit })
+              const newSchedule = lesson.toJSON().Enrollments.filter((enrollment) => ifPast(enrollment.time))
+              const scheduleToRender = newSchedule.map(en => ({
+                ...en,
+                time: timeFormater(en.time, lesson.dataValues.timePerClass)
+              }))
+              return res.render('users/profile', { thisUser, lesson: lesson.toJSON(), canEdit, schedule: scheduleToRender })
             })
         } else {
-          res.render('users/profile', { thisUser, canEdit })
+          Enrollment.findAll({ where: { studentId: thisUser.id }, include: [{ model: Lesson, include: User }], raw: true, nest: true })
+            .then((enrollments) => {
+              const newSchedule = enrollments.filter((enrollment) => ifPast(enrollment.time))
+              console.log(enrollments)
+              const scheduleToRender = newSchedule.map(en => ({
+                ...en,
+                time: timeFormater(en.time, en.Lesson.timePerClass)
+              }))
+              res.render('users/profile', { thisUser, canEdit, schedule: scheduleToRender })
+            })
         }
       })
       .catch(err => next(err))

@@ -15,7 +15,6 @@ const lessonController = {
         lessons.forEach(lesson => {
           lesson.introduction = lesson.introduction?.substring(0, 20)
         })
-        console.log(lessons)
         res.render('lessons', {
           lessons, keyword, pagination: getPagination(limit, page, lessonsAll.count)
       })
