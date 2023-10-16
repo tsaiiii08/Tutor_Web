@@ -24,6 +24,7 @@ router.post('/users/becTeacher', authenticatedStudent, userController.becTeacher
 router.get('/users/:id/edit', authenticated, userController.editUserPage)
 router.put('/users/:id/edit', authenticated, upload.single('avatar'), userController.editUser)
 router.get('/users/:id', authenticated, userController.getUser)
+router.get('/lesson/:id', lessonController.getLesson)
 router.get('/lessons', lessonController.getLessons)
 router.use('/', (req, res) => res.redirect('/lessons'))
 router.use('/', generalErrorHandler)

@@ -26,19 +26,19 @@ const datesInPeriod = (date, day) => { // 算出14內可預約的所有日期
   return datesInPeriod
 }
 
-const avaiLessons = (dates, timePerClass) => { // 算出14內可預約的所有時段
-  const avaiLessons = []
+const allLessonTime = (dates, timePerClass) => { // 算出14內可預約的所有時段
+  const allLessonTime = []
   if (timePerClass === 30) {
     let index = 0
     dates.forEach(date => { // dates是老師選定的兩周內可上課日期
       for (let i = 18; i < 22; i++) {
         date.setHours(i)
-        avaiLessons.push({
+        allLessonTime.push({
           start: new Date(date.setMinutes(0)),
           end: new Date(date.setMinutes(30))
         })
         date.setHours(i + 1)
-        avaiLessons.push({ start: avaiLessons[index].end, end: new Date(date.setMinutes(0)) })
+        allLessonTime.push({ start: allLessonTime[index].end, end: new Date(date.setMinutes(0)) })
         index = index + 2
       }
     })
@@ -46,17 +46,17 @@ const avaiLessons = (dates, timePerClass) => { // 算出14內可預約的所有�
     dates.forEach(date => {
       for (let i = 18; i < 22; i++) {
         date.setMinutes(0)
-        avaiLessons.push({
+        allLessonTime.push({
           start: new Date(date.setHours(i)),
           end: new Date(date.setHours(i + 1))
         })
       }
     })
   }
-  return avaiLessons
+  return allLessonTime
 }
 
-const dateForward = (date) => {
+const dateForward = (date) => { // 用來製造已完課得日期
   const d = new Date(date) // 不希望更改到date本身
   const FOREARD_RANGE = 21 // 需固定老師選定的星期，故是七的倍數，又想確認是已上完的課故至少要比十四天長
   return new Date(d.setDate(d.getDate() - FOREARD_RANGE))
@@ -69,16 +69,34 @@ const ifPast = (time) => {
 
 const timeFormater = (time, timePerClass) => {
   const start = new Date(time)
-  let end = new Date(time)
+  const end = new Date(time)
+ 
   end.setMinutes(end.getMinutes() + timePerClass)
+  console.log(end)
   // 若時間取得的時間數字大於等於十代表有二位數，沒有二位數的話則前面多加一個0
-  let startHour = start.getHours() >= 10 ? start.getHours() : '0' + start.getHours()
-  let endHour = end.getHours() >= 10 ? end.getHours() : '0' + end.getHours()
-  let startMin = start.getMinutes() >= 10 ? start.getMinutes() : '0' + start.getMinutes()
-  let endMin = end.getMinutes() >= 10 ? end.getMinutes() : '0' + end.getMinutes()
+  const startHour = start.getHours() >= 10 ? start.getHours() : '0' + start.getHours()
+  const endHour = end.getHours() >= 10 ? end.getHours() : '0' + end.getHours()
+  const startMin = start.getMinutes() >= 10 ? start.getMinutes() : '0' + start.getMinutes()
+  const endMin = end.getMinutes() >= 10 ? end.getMinutes() : '0' + end.getMinutes()
 
-  return `${time.getFullYear()}/${time.getMonth() + 1}/${time.getDate()}   ${startHour}:${startMin} - ${endHour}:${endMin}` //因getMonth是根據月份回傳0-11，故在顯示上需加一才是數字月份
-
+  return `${time.getFullYear()}/${time.getMonth() + 1}/${time.getDate()}   ${startHour}:${startMin} - ${endHour}:${endMin}` // 因getMonth是根據月份回傳0-11，故在顯示上需加一才是數字月份
 }
 
-module.exports = { randomAvaiDay, datesInPeriod, avaiLessons, dateForward, ifPast, timeFormater }
+const avaiLessonTime = (allTime, enrollTime) => { // allTime預設有start跟end屬性
+  const avaiLessonTime = []
+  for (let i = 0; i < allTime.length; i++) {
+    let ifExclude = true
+    for (let j = 0; j < enrollTime; j++) {
+      if (allTime[i].start.includes(enrollTime[j])) {
+        ifExclude = false // 如果一個時段已經被預約的話，就將ifExclude設為false，並跳出迴圈
+        break
+      }
+    }
+    if (ifExclude) {
+      avaiLessonTime.push(allTime[i].start) // 如果一個時段已經經過所有選課紀錄的檢查都沒被包含在內則將該時段丟進avaiLessonTime
+    }
+  }
+  return avaiLessonTime
+}
+
+module.exports = { randomAvaiDay, datesInPeriod, allLessonTime, dateForward, ifPast, timeFormater, avaiLessonTime }

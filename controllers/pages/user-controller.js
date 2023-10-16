@@ -2,7 +2,6 @@ const bcrypt = require('bcryptjs')
 const { User, Lesson, Enrollment } = require('../../models')
 const { imgurFileHandler } = require('../../helpers/file-helpers')
 const { ifPast, timeFormater } = require('../../helpers/date-helpers')
-const enrollment = require('../../models/enrollment')
 const userController = {
   signInPage: (req, res) => {
     res.render('signin')
