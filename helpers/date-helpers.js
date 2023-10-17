@@ -70,7 +70,7 @@ const ifPast = (time) => {
 const timeFormater = (time, timePerClass) => {
   const start = new Date(time)
   const end = new Date(time)
-  const day = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'] 
+  const day = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
   end.setMinutes(end.getMinutes() + timePerClass)
   // 若時間取得的時間數字大於等於十代表有二位數，沒有二位數的話則前面多加一個0
   const startHour = start.getHours() >= 10 ? start.getHours() : '0' + start.getHours()
@@ -81,12 +81,31 @@ const timeFormater = (time, timePerClass) => {
   return `${time.getFullYear()}/${time.getMonth() + 1}/${time.getDate()} ${day[time.getDay()]}   ${startHour}:${startMin} - ${endHour}:${endMin}` // 因getMonth是根據月份回傳0-11，故在顯示上需加一才是數字月份
 }
 
+const ifTimeEqual = (time1, time2) => {
+  const t1 = new Date(time1)
+  const t2 = new Date(time2)
+  if (t1.getFullYear() === t2.getFullYear()) {
+    if (t1.getMonth() === t2.getMonth()) {
+      if (t1.getDate() === t2.getDate()) {
+        if (t1.getHours() === t2.getHours()) {
+          if (t1.getMinutes() === t2.getMinutes()) {
+            return true
+          }
+        }
+      }
+    }
+  }
+  return false
+}
+
 const avaiLessonTime = (allTime, enrollTime) => { // allTime預設有start跟end屬性
   const avaiLessonTime = []
+  console.log(allTime)
+  console.log(enrollTime)
   for (let i = 0; i < allTime.length; i++) {
     let ifExclude = true
-    for (let j = 0; j < enrollTime; j++) {
-      if (allTime[i].start.includes(enrollTime[j])) {
+    for (let j = 0; j < enrollTime.length; j++) {
+      if (ifTimeEqual(allTime[i].start, enrollTime[j])) {
         ifExclude = false // 如果一個時段已經被預約的話，就將ifExclude設為false，並跳出迴圈
         break
       }
@@ -98,4 +117,6 @@ const avaiLessonTime = (allTime, enrollTime) => { // allTime預設有start跟end
   return avaiLessonTime
 }
 
-module.exports = { randomAvaiDay, datesInPeriod, allLessonTime, dateForward, ifPast, timeFormater, avaiLessonTime }
+
+
+module.exports = { randomAvaiDay, datesInPeriod, allLessonTime, dateForward, ifPast, timeFormater, avaiLessonTime, ifTimeEqual }

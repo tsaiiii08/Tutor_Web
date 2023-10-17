@@ -31,6 +31,7 @@ const lessonController = {
         lesson.Enrollments.forEach((en) => {
           enrollTime.push(en.time)
         })
+        console.log(enrollTime)
         const avaiTimeToRender = []
         const avaiTime = avaiLessonTime(lessonTime, enrollTime)
         avaiTime.forEach(time => {
