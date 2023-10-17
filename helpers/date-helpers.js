@@ -70,16 +70,15 @@ const ifPast = (time) => {
 const timeFormater = (time, timePerClass) => {
   const start = new Date(time)
   const end = new Date(time)
- 
+  const day = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'] 
   end.setMinutes(end.getMinutes() + timePerClass)
-  console.log(end)
   // 若時間取得的時間數字大於等於十代表有二位數，沒有二位數的話則前面多加一個0
   const startHour = start.getHours() >= 10 ? start.getHours() : '0' + start.getHours()
   const endHour = end.getHours() >= 10 ? end.getHours() : '0' + end.getHours()
   const startMin = start.getMinutes() >= 10 ? start.getMinutes() : '0' + start.getMinutes()
   const endMin = end.getMinutes() >= 10 ? end.getMinutes() : '0' + end.getMinutes()
 
-  return `${time.getFullYear()}/${time.getMonth() + 1}/${time.getDate()}   ${startHour}:${startMin} - ${endHour}:${endMin}` // 因getMonth是根據月份回傳0-11，故在顯示上需加一才是數字月份
+  return `${time.getFullYear()}/${time.getMonth() + 1}/${time.getDate()} ${day[time.getDay()]}   ${startHour}:${startMin} - ${endHour}:${endMin}` // 因getMonth是根據月份回傳0-11，故在顯示上需加一才是數字月份
 }
 
 const avaiLessonTime = (allTime, enrollTime) => { // allTime預設有start跟end屬性
