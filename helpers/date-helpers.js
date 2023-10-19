@@ -100,8 +100,6 @@ const ifTimeEqual = (time1, time2) => {
 
 const avaiLessonTime = (allTime, enrollTime) => { // allTime預設有start跟end屬性
   const avaiLessonTime = []
-  console.log(allTime)
-  console.log(enrollTime)
   for (let i = 0; i < allTime.length; i++) {
     let ifExclude = true
     for (let j = 0; j < enrollTime.length; j++) {

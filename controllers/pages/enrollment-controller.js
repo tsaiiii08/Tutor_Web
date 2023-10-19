@@ -1,5 +1,5 @@
 const { Enrollment, User, Lesson } = require('../../models')
-const { ifTimeEqual } =require('../../helpers/date-helpers')
+const { ifTimeEqual, timeFormater } = require('../../helpers/date-helpers')
 const enrollmentController = {
   createEnroll: (req, res, next) => {
     Promise.all([
@@ -10,8 +10,6 @@ const enrollmentController = {
       .then(([user, lesson, enrollments]) => {
         if (!user) throw Error('您的帳號不存在，無法進行預約功能')
         if (!lesson) throw Error('該課程不存在，無法進行預約功能')
-        console.log(enrollments)
-        console.log(`${enrollments[0].time}   ${req.body.avaiTime}`)
         if (enrollments) {
           enrollments.forEach(en => {
             if (ifTimeEqual(en.time, req.body.avaiTime)) {
@@ -19,16 +17,24 @@ const enrollmentController = {
             }
           })
         }
-        Enrollment.create({
+        return Enrollment.create({
           studentId: user.id,
           lessonId: lesson.id,
           time: req.body.avaiTime
         })
-          .then((enrollment) => {
-            res.redirect(`/lesson/${req.params.lessonId}`)
-          })
-          .catch(err => next(err))
       })
+      .then((enrollment) => {
+        Enrollment.findByPk(enrollment.id, { include: [{ model: Lesson, include: User }], raw: true, nest: true })
+          .then((enrollment) => {
+            if (enrollment) {
+              enrollment.time = timeFormater(enrollment.time, enrollment.Lesson.timePerClass)
+              res.render('popup', { enrollment, lessonId: req.params.lessonId })
+            } else {
+              res.render('popup', { lessonId: req.params.lessonId })
+            }
+          })
+      })
+      .catch(err => next(err))
   }
 }
 
