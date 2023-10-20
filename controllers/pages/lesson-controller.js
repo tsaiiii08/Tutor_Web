@@ -1,3 +1,4 @@
+const { Op } = require('sequelize')
 const { Lesson, User, Enrollment } = require('../../models/index')
 const { getOffset, getPagination } = require('../../helpers/pagination-helper')
 const { datesInPeriod, allLessonTime, avaiLessonTime, timeFormater } = require('../../helpers/date-helpers')
@@ -8,16 +9,25 @@ const lessonController = {
     const page = Number(req.query.page) || 1
     const limit = DEFAULT_LIMIT
     const offset = getOffset(limit, page)
-    Lesson.findAndCountAll({ include: User, limit, offset, raw: true, nest: true })
-      .then((lessonsAll) => {
-        const lessons = lessonsAll.rows.filter((lesson) =>
-          lesson.name.toLowerCase().includes(keyword.toLowerCase()) || lesson.User.name.toLowerCase().includes(keyword.toLowerCase())
-        )
-        lessons.forEach(lesson => {
+    Lesson.findAndCountAll({
+      include: User,
+      where: {
+        [Op.or]: [
+          { name: { [Op.like]: `%${keyword?.toLowerCase()}%` } },
+          { '$User.name$': { [Op.like]: `%${keyword?.toLowerCase()}%` } }
+        ]
+      },
+      limit,
+      offset,
+      raw: true,
+      nest: true
+    })
+      .then((lessons) => {
+        lessons.rows.forEach(lesson => {
           lesson.introduction = lesson.introduction?.substring(0, 20)
         })
         res.render('lessons', {
-          lessons, keyword, pagination: getPagination(limit, page, lessonsAll.count)
+          lessons: lessons.rows, keyword, pagination: getPagination(limit, page, lessons.count)
         })
       })
       .catch(err => next(err))

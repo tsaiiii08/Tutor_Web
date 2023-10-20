@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs')
 const { User, Lesson, Enrollment } = require('../../models')
 const { imgurFileHandler } = require('../../helpers/file-helpers')
-const { ifPast, timeFormater } = require('../../helpers/date-helpers')
+const { ifNotPast, timeFormater } = require('../../helpers/date-helpers')
 const userController = {
   signInPage: (req, res) => {
     res.render('signin')
@@ -84,7 +84,7 @@ const userController = {
           Lesson.findOne({ where: { teacherId: req.params.id }, include: [{ model: Enrollment, include: User }], raw: false, nest: true })
 
             .then((lesson) => {
-              const newSchedule = lesson.toJSON().Enrollments.filter((enrollment) => ifPast(enrollment.time))
+              const newSchedule = lesson.toJSON().Enrollments.filter((enrollment) => ifNotPast(enrollment.time))
               const scheduleToRender = newSchedule.map(en => ({
                 ...en,
                 time: timeFormater(en.time, lesson.dataValues.timePerClass)
@@ -94,8 +94,7 @@ const userController = {
         } else {
           Enrollment.findAll({ where: { studentId: thisUser.id }, include: [{ model: Lesson, include: User }], raw: true, nest: true })
             .then((enrollments) => {
-              const newSchedule = enrollments.filter((enrollment) => ifPast(enrollment.time))
-              console.log(enrollments)
+              const newSchedule = enrollments.filter((enrollment) => ifNotPast(enrollment.time))
               const scheduleToRender = newSchedule.map(en => ({
                 ...en,
                 time: timeFormater(en.time, en.Lesson.timePerClass)
@@ -141,12 +140,14 @@ const userController = {
         .catch(err => next(err))
     } else {
       if (!req.body.name || !req.body.lessonName || !req.body.link || !req.body.timePerClass || !req.body.availableDay) throw new Error('姓名、課程名稱、上課視訊連結、每堂課時間長度以及可以上課時間皆為必填！')
+      console.log('yyy')
       Promise.all([
-        Lesson.findOne({ where: { teacherId: req.user.id } }),
+        Lesson.findOne({ where: { teacherId: req.user.id }, include: Enrollment, nest: true }),
         User.findByPk(req.user.id),
         imgurFileHandler(file)
       ])
         .then(([lesson, user, filepath]) => {
+          console.log(lesson)
           return Promise.all([
             lesson.update({
               name: req.body.lessonName,
