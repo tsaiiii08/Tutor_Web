@@ -94,7 +94,7 @@ const userController = {
               return res.render('users/profile', { thisUser, lesson: lesson.toJSON(), canEdit, schedule: scheduleToRender })
             })
         } else {
-          Promise.all([User.findAll({ //算出所有學生目前已上課的分鐘數，並照分鐘數排序
+          Promise.all([User.findAll({ // 算出所有學生目前已上課的分鐘數，並照分鐘數排序
             include: [{ model: Enrollment, include: Lesson }],
             where: {
               [Op.and]:
@@ -110,14 +110,13 @@ const userController = {
             raw: true,
             nest: true
           }),
-            Enrollment.findAll({ where: { studentId: thisUser.id }, include: [{ model: Lesson, include: User }], raw: true, nest: true })])
+          Enrollment.findAll({ where: { studentId: thisUser.id }, include: [{ model: Lesson, include: User }], raw: true, nest: true })])
             .then(([learningTime, enrollments]) => {
-              let rank = 1
               for (let i = 0; i < learningTime.length; i++) {
                 if (learningTime[i].id === thisUser.id) {
-                  thisUser.rank = i+1
+                  thisUser.rank = i + 1
                   break
-                } 
+                }
               }
               console.log(thisUser.rank)
               const newSchedule = enrollments.filter((enrollment) => ifNotPast(enrollment.time))
