@@ -1,4 +1,6 @@
 const bcrypt = require('bcryptjs')
+const { Op } = require('sequelize')
+const sequelize = require('sequelize')
 const { User, Lesson, Enrollment } = require('../../models')
 const { imgurFileHandler } = require('../../helpers/file-helpers')
 const { ifNotPast, timeFormater } = require('../../helpers/date-helpers')
@@ -92,14 +94,38 @@ const userController = {
               return res.render('users/profile', { thisUser, lesson: lesson.toJSON(), canEdit, schedule: scheduleToRender })
             })
         } else {
-          Enrollment.findAll({ where: { studentId: thisUser.id }, include: [{ model: Lesson, include: User }], raw: true, nest: true })
-            .then((enrollments) => {
+          Promise.all([User.findAll({ //算出所有學生目前已上課的分鐘數，並照分鐘數排序
+            include: [{ model: Enrollment, include: Lesson }],
+            where: {
+              [Op.and]:
+                [{ isAdmin: false }, { isTeacher: false }, { '$Enrollments.time$': { [Op.lt]: new Date() } }]
+            },
+            attributes: ['id',
+              [sequelize.fn('sum', sequelize.col('Enrollments.Lesson.time_per_class')), 'totalTime']
+            ],
+            group: ['id'],
+            order: [
+              ['totalTime', 'DESC']
+            ],
+            raw: true,
+            nest: true
+          }),
+            Enrollment.findAll({ where: { studentId: thisUser.id }, include: [{ model: Lesson, include: User }], raw: true, nest: true })])
+            .then(([learningTime, enrollments]) => {
+              let rank = 1
+              for (let i = 0; i < learningTime.length; i++) {
+                if (learningTime[i].id === thisUser.id) {
+                  thisUser.rank = i+1
+                  break
+                } 
+              }
+              console.log(thisUser.rank)
               const newSchedule = enrollments.filter((enrollment) => ifNotPast(enrollment.time))
               const scheduleToRender = newSchedule.map(en => ({
                 ...en,
                 time: timeFormater(en.time, en.Lesson.timePerClass)
               }))
-              res.render('users/profile', { thisUser, canEdit, schedule: scheduleToRender })
+              res.render('users/profile', { thisUser, canEdit, schedule: scheduleToRender, totalAmount: learningTime.length })
             })
         }
       })
