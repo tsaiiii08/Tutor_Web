@@ -15,7 +15,11 @@ module.exports = {
       },
       score: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        validate: {
+          min: 1,
+          max: 5
+        }
       },
       comment: {
         type: Sequelize.TEXT

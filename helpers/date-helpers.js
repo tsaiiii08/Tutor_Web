@@ -56,10 +56,9 @@ const allLessonTime = (dates, timePerClass) => { // 算出14內可預約的所�
   return allLessonTime
 }
 
-const dateForward = (date) => { // 用來製造已完課得日期(種子資料)
+const dateForward = (date, forward) => { // 用來製造已完課得日期(種子資料)
   const d = new Date(date) // 不希望更改到date本身
-  const FOREARD_RANGE = 21 // 需固定老師選定的星期，故是七的倍數，又想確認是已上完的課故至少要比十四天長
-  return new Date(d.setDate(d.getDate() - FOREARD_RANGE))
+  return new Date(d.setDate(d.getDate() - forward))
 }
 
 const ifNotPast = (time) => {
