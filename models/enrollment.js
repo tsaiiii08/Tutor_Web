@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate (models) {
       Enrollment.belongsTo(models.Lesson, { foreignKey: 'lessonId' })
       Enrollment.belongsTo(models.User, { foreignKey: 'studentId' })
+      Enrollment.belongsTo(models.Rate, { foreignKey: 'enrollmentId' })
     }
   }
   Enrollment.init({

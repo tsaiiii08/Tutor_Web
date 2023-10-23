@@ -118,7 +118,6 @@ const userController = {
                   break
                 }
               }
-              console.log(thisUser.rank)
               const newSchedule = enrollments.filter((enrollment) => ifNotPast(enrollment.time))
               const scheduleToRender = newSchedule.map(en => ({
                 ...en,
