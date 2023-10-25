@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs')
 const { Op } = require('sequelize')
 const sequelize = require('sequelize')
-const { User, Lesson, Enrollment } = require('../../models')
+const { User, Lesson, Enrollment, Rate } = require('../../models')
 const { imgurFileHandler } = require('../../helpers/file-helpers')
 const { ifNotPast, timeFormater } = require('../../helpers/date-helpers')
 const userController = {
@@ -110,7 +110,8 @@ const userController = {
             raw: true,
             nest: true
           }),
-          Enrollment.findAll({ where: { studentId: thisUser.id }, include: [{ model: Lesson, include: User }], raw: true, nest: true })])
+          Enrollment.findAll({ where: { studentId: thisUser.id }, include: [{ model: Lesson, include: User }, Rate], raw: true, nest: true })
+          ])
             .then(([learningTime, enrollments]) => {
               for (let i = 0; i < learningTime.length; i++) {
                 if (learningTime[i].id === thisUser.id) {
@@ -118,12 +119,20 @@ const userController = {
                   break
                 }
               }
-              const newSchedule = enrollments.filter((enrollment) => ifNotPast(enrollment.time))
+              const newSchedule = []
+              const notRated = []
+              enrollments.forEach(enrollment => {
+                if (ifNotPast(enrollment.time)) {
+                  newSchedule.push(enrollment)
+                } else if (!enrollment.Rate.id) {
+                  notRated.push(enrollment)
+                }
+              })
               const scheduleToRender = newSchedule.map(en => ({
                 ...en,
                 time: timeFormater(en.time, en.Lesson.timePerClass)
               }))
-              res.render('users/profile', { thisUser, canEdit, schedule: scheduleToRender, totalAmount: learningTime.length })
+              res.render('users/profile', { thisUser, canEdit, schedule: scheduleToRender, totalAmount: learningTime.length, notRated })
             })
         }
       })

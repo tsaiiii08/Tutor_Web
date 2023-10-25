@@ -43,7 +43,7 @@ const lessonController = {
     })
     ])
       .then(([Users, lessons]) => {
-        const topTenUsers = Users.slice(0, 10) //只選取學習時數前十的學生
+        const topTenUsers = Users.slice(0, 10) // 只選取學習時數前十的學生
         topTenUsers.forEach((user, index) => {
           user.rank = index + 1
         })
