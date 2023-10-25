@@ -30,6 +30,7 @@ router.get('/lesson/:id', authenticated, lessonController.getLesson)
 router.get('/lessons', lessonController.getLessons)
 router.post('/enrollment/:lessonId', authenticated, enrollmentController.createEnroll)
 router.get('/rate/:enrollmentId', authenticated, rateController.ratePage)
+router.post('/rate/:enrollmentId', authenticated, rateController.rate)
 router.use('/', (req, res) => res.redirect('/lessons'))
 router.use('/', generalErrorHandler)
 
