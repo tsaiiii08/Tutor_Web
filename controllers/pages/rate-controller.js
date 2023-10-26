@@ -15,7 +15,6 @@ const rateController = {
       })
   },
   rate: (req, res, next) => {
-    console.log('yy')
     if (!req.body.score) throw Error('要選擇分數')
     Enrollment.findOne({
       where: { id: req.params.enrollmentId },

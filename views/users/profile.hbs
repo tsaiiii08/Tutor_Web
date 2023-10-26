@@ -90,7 +90,7 @@
           <div class="mt-3 mx-2 d-flex align-items-center border">
             <img src="{{this.Lesson.User.avatar}}" alt="" style="width:30px;height:30px; border-radius:50%; background-color:gray;margin:5px 5px;">
             <p style="margin:0px 10px 0px 5px">{{this.Lesson.User.name}}</p>
-            {{#if ../canEdit}} <a href="/rate/{{this.id}}" class="btn btn-block" style="background-color:bisque">評分</a> {{/if}}
+            {{#if ../canEdit}} <a href="/rates/{{this.id}}" class="btn btn-block" style="background-color:bisque">評分</a> {{/if}}
           </div>
           {{/each}}
         </div>

@@ -1,7 +1,7 @@
 <div class="card" style="margin:auto;width:60%;height:60%">
   <div class="card-body d-flex flex-column align-items-center">
     <h4>本次上課時間為{{enrollment.time}}</h4>
-    <form action="/rate/{{enrollment.id}}" method="POST" style="width:50%" >
+    <form action="/rates/{{enrollment.id}}" method="POST" style="width:50%" >
       <div style="padding-top:50px">
         <label for="socre" class="mb-2"> 分數 (5分為最高分)</label>
         <select class="form-control" id="score" name="score" >

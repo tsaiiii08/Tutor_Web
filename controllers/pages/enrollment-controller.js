@@ -29,9 +29,9 @@ const enrollmentController = {
           .then((enrollment) => {
             if (enrollment) {
               enrollment.time = timeFormater(enrollment.time, enrollment.Lesson.timePerClass)
-              res.render('popup', { enrollment, lessonId: req.params.lessonId })
+              res.render('enrollMessage', { enrollment, lessonId: req.params.lessonId })
             } else {
-              res.render('popup', { lessonId: req.params.lessonId })
+              res.render('enrollMessage', { lessonId: req.params.lessonId })
             }
           })
       })

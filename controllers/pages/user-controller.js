@@ -95,7 +95,6 @@ const userController = {
                   rates.push({ score: enrollment.Rate.score, comment: enrollment.Rate.comment })
                 }
               })
-              console.log(newSchedule)
               let totalScore = 0
               rates.forEach(r => {
                 totalScore = totalScore + r.score
