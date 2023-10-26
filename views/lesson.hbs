@@ -6,19 +6,26 @@
       <div style="margin-left:40px;margin-top:10px;"> 
         <h3>{{lesson.User.name}}</h3>
         <div>
-          <p>{{lesson.User.nation}}</p>
-          <p>平均評分</p>
+          <div class="mt-4 mb-2 d-flex align-items-center">
+            <i class="fa-solid fa-house" style="margin-right:5px"></i>
+            <p style="margin:0">{{lesson.User.nation}}</p>
+          </div>
+          <div class="d-flex align-items-center">
+            <i class="fa-regular fa-heart" style="margin-right:5px"></i>
+            <p style="margin:0">{{avgScore}}</p>
+          </div>
         </div>
       </div>
     </div>
     <div class="d-flex flex-column justify-content-between" style="min-height:60%">
-      <div style="height:30%">
+      <div style="min-height:30%">
         <h5>自我介紹</h5>
-        <p>{{lesson.User.introduction}}</p>
+        <div class="border-top" style="height:auto;word-break:break-all;padding-right:10px ">{{lesson.User.introduction}}</div>
       </div>
       <div style="height:30%">
-        <h5>課程及教學風格</h5>
-        <p>{{lesson.introduction}}</p>
+        <h5>課程名稱及教學風格</h5>
+        <div class="border-top" style="font-size:19px">{{lesson.name}}</div>
+        <div style="height:auto;word-break:break-all;padding-right:10px ">{{lesson.introduction}}</div>
       </div>
       <div style="min-height:30%">
         <h5>課程評價</h5>

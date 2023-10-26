@@ -83,7 +83,7 @@ const userController = {
       })
       .then((thisUser) => {
         if (thisUser.isTeacher === 1) {
-          Lesson.findOne({ where: { teacherId: req.params.id }, include: [{ model: Enrollment, include: Rate }], raw: false, nest: true })
+          Lesson.findOne({ where: { teacherId: req.params.id }, include: [{ model: Enrollment, include: [User, Rate] }], raw: false, nest: true })
             .then((lesson) => {
               const newSchedule = []
               const rates = []
@@ -95,11 +95,17 @@ const userController = {
                   rates.push({ score: enrollment.Rate.score, comment: enrollment.Rate.comment })
                 }
               })
+              console.log(newSchedule)
+              let totalScore = 0
+              rates.forEach(r => {
+                totalScore = totalScore + r.score
+              })
+              const avgScore = (totalScore / rates.length).toFixed(1) // 取到小數點第一位
               const scheduleToRender = newSchedule.map(en => ({
                 ...en,
                 time: timeFormater(en.time, lesson.dataValues.timePerClass)
               }))
-              return res.render('users/profile', { thisUser, lesson: lesson.toJSON(), canEdit, schedule: scheduleToRender, rates })
+              return res.render('users/profile', { thisUser, lesson: lesson.toJSON(), canEdit, schedule: scheduleToRender, rates, avgScore })
             })
         } else {
           Promise.all([User.findAll({ // 算出所有學生目前已上課的分鐘數，並照分鐘數排序

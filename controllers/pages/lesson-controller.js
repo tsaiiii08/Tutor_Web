@@ -69,6 +69,11 @@ const lessonController = {
             rates.push({ score: en.Rate.score, comment: en.Rate.comment })
           }
         })
+        let totalScore = 0
+        rates.forEach(r => {
+          totalScore = totalScore + r.score
+        })
+        const avgScore = (totalScore / rates.length).toFixed(1) // 取到小數點第一位
         const avaiTimeToRender = []
         const avaiTime = avaiLessonTime(lessonTime, enrollTime)
         avaiTime.forEach(time => {
@@ -77,7 +82,7 @@ const lessonController = {
         if (!avaiTime.length) {
           noAvaiTime = true
         }
-        res.render('lesson', { lesson: lesson.toJSON(), noAvaiTime, avaiTime: avaiTimeToRender, rates })
+        res.render('lesson', { lesson: lesson.toJSON(), noAvaiTime, avaiTime: avaiTimeToRender, rates, avgScore })
       })
       .catch(err => next(err))
   }
