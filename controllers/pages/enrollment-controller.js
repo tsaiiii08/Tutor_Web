@@ -9,6 +9,7 @@ const enrollmentController = {
     ])
       .then(([user, lesson, enrollments]) => {
         if (!user) throw Error('您的帳號不存在，無法進行預約功能')
+        if (user.isTeacher || user.isAdmin) throw Error('只有學生身分的人可以使用預約功能')
         if (!lesson) throw Error('該課程不存在，無法進行預約功能')
         if (enrollments) {
           enrollments.forEach(en => {
