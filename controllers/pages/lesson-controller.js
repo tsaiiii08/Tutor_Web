@@ -1,6 +1,6 @@
 const { Op } = require('sequelize')
 const sequelize = require('sequelize')
-const { Lesson, User, Enrollment } = require('../../models/index')
+const { Lesson, User, Enrollment, Rate } = require('../../models/index')
 const { getOffset, getPagination } = require('../../helpers/pagination-helper')
 const { datesInPeriod, allLessonTime, avaiLessonTime, timeFormater } = require('../../helpers/date-helpers')
 const lessonController = {
@@ -57,13 +57,17 @@ const lessonController = {
       .catch(err => next(err))
   },
   getLesson: (req, res, next) => {
-    Lesson.findByPk(req.params.id, { include: [User, { model: Enrollment, include: User }], nest: true, raw: false })
+    Lesson.findByPk(req.params.id, { include: [User, { model: Enrollment, include: [User, Rate] }], nest: true, raw: false })
       .then((lesson) => {
         let noAvaiTime = false
         const lessonTime = allLessonTime(datesInPeriod(new Date(), lesson.availableDay), lesson.timePerClass)
         const enrollTime = []
+        const rates = []
         lesson.Enrollments.forEach((en) => {
           enrollTime.push(en.time)
+          if (en.Rate) {
+            rates.push({ score: en.Rate.score, comment: en.Rate.comment })
+          }
         })
         const avaiTimeToRender = []
         const avaiTime = avaiLessonTime(lessonTime, enrollTime)
@@ -73,7 +77,7 @@ const lessonController = {
         if (!avaiTime.length) {
           noAvaiTime = true
         }
-        res.render('lesson', { lesson: lesson.toJSON(), noAvaiTime, avaiTime: avaiTimeToRender })
+        res.render('lesson', { lesson: lesson.toJSON(), noAvaiTime, avaiTime: avaiTimeToRender, rates })
       })
       .catch(err => next(err))
   }
