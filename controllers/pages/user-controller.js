@@ -83,7 +83,14 @@ const userController = {
       })
       .then((thisUser) => {
         if (thisUser.isTeacher === 1) {
-          Lesson.findOne({ where: { teacherId: req.params.id }, include: [{ model: Enrollment, include: [User, Rate] }], raw: false, nest: true })
+          Lesson.findOne({
+            where: { teacherId: req.params.id },
+            include: [{ model: Enrollment, include: [User, Rate] }],
+            order: [
+              [Enrollment, 'time', 'ASC']],
+            raw: false,
+            nest: true
+          })
             .then((lesson) => {
               const newSchedule = []
               const rates = []
@@ -123,7 +130,13 @@ const userController = {
             raw: true,
             nest: true
           }),
-          Enrollment.findAll({ where: { studentId: thisUser.id }, include: [{ model: Lesson, include: User }, Rate], raw: true, nest: true })
+          Enrollment.findAll({
+            where: { studentId: thisUser.id },
+            include: [{ model: Lesson, include: User }, Rate],
+            order: [['time', 'ASC']],
+            raw: true,
+            nest: true
+          })
           ])
             .then(([learningTime, enrollments]) => {
               for (let i = 0; i < learningTime.length; i++) {
