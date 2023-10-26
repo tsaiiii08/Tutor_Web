@@ -30,6 +30,7 @@ const rateController = {
         })
       })
       .then(() => {
+        req.flash('success_messages', `已成功送出評價!`)
         res.redirect(`/users/${req.user.id}`)
       })
       .catch(err => next(err))
