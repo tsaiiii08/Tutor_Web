@@ -114,37 +114,47 @@ const userController = {
               return res.render('users/profile', { thisUser, lesson: lesson.toJSON(), canEdit, schedule: scheduleToRender, rates, avgScore })
             })
         } else {
-          Promise.all([User.findAll({ // 算出所有學生目前已上課的分鐘數，並照分鐘數排序
-            include: [{ model: Enrollment, include: Lesson }],
-            where: {
-              [Op.and]:
+          Promise.all([
+            User.findAll({
+              where: {
+                [Op.and]: {
+                  isTeacher: false,
+                  isAdmin: false
+                }
+              }
+            }),
+            User.findAll({ // 算出所有學生目前已上課的分鐘數，並照分鐘數排序
+              include: [{ model: Enrollment, include: Lesson }],
+              where: {
+                [Op.and]:
                 [{ isAdmin: false }, { isTeacher: false }, { '$Enrollments.time$': { [Op.lt]: new Date() } }]
-            },
-            attributes: ['id',
-              [sequelize.fn('sum', sequelize.col('Enrollments.Lesson.time_per_class')), 'totalTime']
-            ],
-            group: ['id'],
-            order: [
-              ['totalTime', 'DESC']
-            ],
-            raw: true,
-            nest: true
-          }),
-          Enrollment.findAll({
-            where: { studentId: thisUser.id },
-            include: [{ model: Lesson, include: User }, Rate],
-            order: [['time', 'ASC']],
-            raw: true,
-            nest: true
-          })
+              },
+              attributes: ['id',
+                [sequelize.fn('sum', sequelize.col('Enrollments.Lesson.time_per_class')), 'totalTime']
+              ],
+              group: ['id'],
+              order: [
+                ['totalTime', 'DESC']
+              ],
+              raw: true,
+              nest: true
+            }),
+            Enrollment.findAll({
+              where: { studentId: thisUser.id },
+              include: [{ model: Lesson, include: User }, Rate],
+              order: [['time', 'ASC']],
+              raw: true,
+              nest: true
+            })
           ])
-            .then(([learningTime, enrollments]) => {
+            .then(([users, learningTime, enrollments]) => {
               for (let i = 0; i < learningTime.length; i++) {
                 if (learningTime[i].id === thisUser.id) {
                   thisUser.rank = i + 1
                   break
                 }
               }
+              if (!thisUser.rank) { thisUser.rank = users.length } //若學生都還沒有完課紀錄時，上面的learningTime內就不會有他的id，所以rank這裡要幫他設定，並設成最後
               const newSchedule = []
               const notRated = []
               enrollments.forEach(enrollment => {
@@ -158,7 +168,7 @@ const userController = {
                 ...en,
                 time: timeFormater(en.time, en.Lesson.timePerClass)
               }))
-              res.render('users/profile', { thisUser, canEdit, schedule: scheduleToRender, totalAmount: learningTime.length, notRated })
+              res.render('users/profile', { thisUser, canEdit, schedule: scheduleToRender, totalAmount: users.length, notRated })
             })
         }
       })
