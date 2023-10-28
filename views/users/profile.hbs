@@ -4,9 +4,9 @@
     {{#if thisUser.isTeacher}}
     <div class="col-4 d-flex flex-column justify-content-between">
       <div class="row d-flex-column" style="margin-right:20px;text-align: start">
-        <img src="{{thisUser.avatar}}" alt="你的大頭貼" style="height:200px;width:200px;background-color:gray;margin-bottom:20px">
+        <img src="{{thisUser.avatar}}" alt="" style="height:200px;width:200px;background-color:gray;border-radius:50%;margin-bottom:40px">
         <p style="margin-bottom:10px;font-size:30px;">{{thisUser.name}}</p>
-          <div class="mt-4 mb-2 d-flex align-items-center">
+          <div class="mt-2 mb-2 d-flex align-items-center">
             <i class="fa-solid fa-house" style="margin-right:5px"></i>
             <p style="margin:0">{{thisUser.nation}}</p>
           </div>
@@ -14,10 +14,10 @@
           <i class="fa-regular fa-heart" style="margin-right:3px"></i>
           <p style="margin:0">{{avgScore}}</p>
         </div>
-        <div style="height:auto;word-break:break-all;padding-right:10px ">{{thisUser.introduction}}</div>
+        <div style="height:auto;word-break:break-all;padding-right:20px ">{{thisUser.introduction}}</div>
       </div>
       {{#if canEdit}}
-      <div class="row d-flex">
+      <div class="mt-4 row d-flex">
         <a href="/users/{{user.id}}/edit" class="btn btn-info btn-block" style="width:200px">修改個人資料和可預約的上課時間</a>
       </div>
       {{/if}}
@@ -29,8 +29,8 @@
           {{#each schedule}}
           <div class="d-flex flex-column border mt-2" style="width:49%;text-align:start;margin-right:2px;padding:5px">
             <p >時間: {{this.time}}</p>
-            <p>學生姓名: {{this.User.name}}</p>
-            <p style="margin:0px">上課連結: <a href="{{../lesson.link}}">{{../lesson.link}}</a></p>
+            <p>學生姓名: <a href="/users/{{this.User.id}}">{{this.User.name}}</a></p>
+            <p style="height:auto;word-break:break-all;margin:0px">上課連結: <a href="{{../lesson.link}}">{{../lesson.link}}</a></p>
           </div>
           {{/each}}
         </div>
@@ -59,13 +59,16 @@
     {{else}}
     <div class="col-4 d-flex flex-column justify-content-between">
       <div class="row d-flex-column" style="text-align: start">
-        <img src="{{thisUser.avatar}}" alt="你的大頭貼" style="height:200px;width:200px;background-color:gray;margin-bottom:20px">
-        <p style="font-size:30px;">{{thisUser.name}}</p>
-        <p>{{thisUser.nation}}</p>
-        <p>{{thisUser.introduction}}</p>
+        <img src="{{thisUser.avatar}}" alt="" style="height:200px;width:200px;background-color:gray;border-radius:50%;margin-bottom:40px">
+        <p style="margin-bottom:10px;font-size:30px;">{{thisUser.name}}</p>
+        <div class="mt-2 mb-2 d-flex align-items-center">
+          <i class="fa-solid fa-house" style="margin-right:5px"></i>
+          <p style="margin:0">{{thisUser.nation}}</p>
+        </div>
+        <div style="height:auto;word-break:break-all;padding-right:20px ">{{thisUser.introduction}}</div>
       </div>
       {{#if canEdit}}
-      <div class="row d-flex">
+      <div class="mt-4 row d-flex">
         <a href="/users/{{user.id}}/edit" class="btn btn-info btn-block" style="width:200px">修改個人資料</a>
       </div>
       {{/if}}
@@ -77,8 +80,8 @@
           {{#each schedule}}
             <div class="d-flex flex-column border mt-2" style="width:49%;text-align:start;margin-right:2px;padding:5px">
             <p>時間: {{this.time}}</p>
-            <p>老師姓名: {{this.Lesson.User.name}}</p>
-            <p>上課連結:<a href="{{this.Lesson.link}}"> {{this.Lesson.link}}</a></p>
+            <p>老師姓名: <a href="/lessons/{{this.Lesson.id}}">{{this.Lesson.User.name}}</a></p>
+            <p>上課連結:<a href="{{this.Lesson.link}}" style="height:auto;word-break:break-all"> {{this.Lesson.link}}</a></p>
           </div>
           {{/each}}
         </div>
