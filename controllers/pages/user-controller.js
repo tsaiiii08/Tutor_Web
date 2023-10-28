@@ -216,14 +216,14 @@ const userController = {
         imgurFileHandler(file)
       ])
         .then(([lesson, user, filepath]) => {
-          console.log(lesson)
+          
           return Promise.all([
             lesson.update({
               name: req.body.lessonName,
               introduction: req.body.lessonIntro,
               link: req.body.link,
               timePerClass: req.body.timePerClass,
-              availableDay: req.body.availableDay.join('')
+              availableDay: req.body.availableDay.length > 1 ? req.body.availableDay.join('') : req.body.availableDay
             }),
             user.update({
               name: req.body.name,
