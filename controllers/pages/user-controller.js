@@ -60,7 +60,7 @@ const userController = {
           introduction: req.body.introduction,
           link: req.body.link,
           timePerClass: req.body.timePerClass,
-          availableDay: req.body.availableDay.join('')
+          availableDay: req.body.availableDay.length > 1 ? req.body.availableDay.join('') : req.body.availableDay
         })
         return user.update({ isTeacher: true })
       })
