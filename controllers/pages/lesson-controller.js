@@ -73,7 +73,7 @@ const lessonController = {
         rates.forEach(r => {
           totalScore = totalScore + r.score
         })
-        const avgScore = (totalScore / rates.length).toFixed(1) // 取到小數點第一位
+        const avgScore = totalScore? (totalScore / rates.length).toFixed(1) : '尚未有評分'// 取到小數點第一位，若尚未有評分紀錄就顯示'尚未有評分'
         const avaiTimeToRender = []
         const avaiTime = avaiLessonTime(lessonTime, enrollTime)
         avaiTime.forEach(time => {

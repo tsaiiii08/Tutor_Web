@@ -106,7 +106,7 @@ const userController = {
               rates.forEach(r => {
                 totalScore = totalScore + r.score
               })
-              const avgScore = (totalScore / rates.length).toFixed(1) // 取到小數點第一位
+              const avgScore = totalScore ? (totalScore / rates.length).toFixed(1) : '尚未有評分'// 取到小數點第一位，若尚未有評分紀錄就顯示'尚未有評分'
               const scheduleToRender = newSchedule.map(en => ({
                 ...en,
                 time: timeFormater(en.time, lesson.dataValues.timePerClass)
