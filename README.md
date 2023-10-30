@@ -19,39 +19,43 @@
 1. 請確認已安裝 node.js 與 npm
 2. 將專案 clone 到本地
 
-   ```bash
+    ```
    git clone ...
    ```
-3.進入到本地資料夾後，輸入以下指令安裝套件
-   ```bash
- npm install
-   ```
+
+ 3. 進入到本地資料夾後，輸入以下指令安裝套件
+      ```
+      npm install
+      ```
 4. 依照 .env.example 設定環境變數
 5. 連接資料庫後，輸入以下指令建立資料庫內容
-     ```bash
+   ```
    npx sequelize db:migrate
    ```
 6. 輸入以下指令建立種子資料
 
-   ```bash
+    ```
     npx sequelize db:seed:all
    ```
+
 7. 開始專案
 
-   ```bash
+   ```
    npm run start
    ```
 
 8. 若看見以下訊息代表順利運行，便可打開瀏覽器進入該網址
-
-   ```bash
+    
+   ```
    Example app listening on port 3000!
    ```
    
 9.  若想結束此專案請輸入
-    ```bash
+    
+    ```
      ctrl + c
      ```
+     
 ### 開發環境
 * Node.js 16.14.1
 * MySQL 8.0.15
