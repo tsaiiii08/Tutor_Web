@@ -18,12 +18,12 @@ const lessonController = {
       },
       attributes: ['id',
         'name',
-        'avatar',
-        [sequelize.fn('sum', sequelize.col('Enrollments.Lesson.time_per_class')), 'totalTime']
+        'avatar'
+       // [sequelize.fn('sum', sequelize.col('Enrollments.Lesson.time_per_class')), 'totalTime']
       ],
       group: ['id'],
       order: [
-        ['totalTime', 'DESC']
+        [sequelize.fn('sum', sequelize.col('Enrollments.Lesson.time_per_class')), 'DESC']
       ],
       raw: true,
       nest: true
@@ -43,6 +43,7 @@ const lessonController = {
     })
     ])
       .then(([Users, lessons]) => {
+        console.log(Users)
         const topTenUsers = Users.slice(0, 10) // 只選取學習時數前十的學生
         topTenUsers.forEach((user, index) => {
           user.rank = index + 1
