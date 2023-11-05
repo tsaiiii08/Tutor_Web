@@ -31,7 +31,7 @@ router.get('/lessons', lessonController.getLessons)
 router.post('/enrollments/:lessonId', authenticated, enrollmentController.createEnroll)
 router.get('/rates/:enrollmentId', authenticated, rateController.ratePage)
 router.post('/rates/:enrollmentId', authenticated, rateController.rate)
-router.use('/', (req, res) => res.redirect('/lessons'))
+router.get('/', (req, res) => res.redirect('/lessons'))
 router.use('/', generalErrorHandler)
 
 module.exports = router
